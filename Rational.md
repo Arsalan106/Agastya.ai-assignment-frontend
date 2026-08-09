@@ -1,7 +1,17 @@
 # Fee Follow-up Dashboard — Rationale
-
+# Dashboard Desktop view
 ![Dashboard](<WhatsApp Image 2026-08-10 at 1.11.22 AM.jpeg>)
+
+# Mobile view
+![Dashboard](<WhatsApp Image 2026-08-10 at 1.11.04 AM.jpeg>)
+
+# Payment History
+![Payment History](<WhatsApp Image 2026-08-10 at 1.11.39 AM.jpeg>)
+
+# Reminder Modal
+![Reminder Modal](<WhatsApp Image 2026-08-10 at 1.12.25 AM.jpeg>)
 ## 1. Visual hierarchy
+
 
 **Promoted:** Outstanding amount, accounts needing action, urgent cases, and search. These are the decisions Lakshmi needs within the first few seconds.
 
