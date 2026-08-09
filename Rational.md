@@ -1,17 +1,6 @@
 # Fee Follow-up Dashboard — Rationale
-# Dashboard Desktop view
-![Dashboard](./screenshots/dashboard.jpeg)
 
-# Mobile view
-![Dashboard](./screenshots/mobile.jpeg)
-
-# Payment History
-![Payment History](./screenshots/history.jpeg)
-
-# Reminder Modal
-![Reminder Modal](./screenshots/reminder.jpeg)
 ## 1. Visual hierarchy
-
 
 **Promoted:** Outstanding amount, accounts needing action, urgent cases, and search. These are the decisions Lakshmi needs within the first few seconds.
 

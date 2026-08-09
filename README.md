@@ -7,6 +7,10 @@ A responsive React + TypeScript dashboard designed for a school accounts operato
 ### Desktop Dashboard
 
 # Dashboard Desktop view
+# Video Recording
+<video controls src="20260809-2013-32.5978732.mp4" title="Title"></video>
+
+# Screenshot
 ![Dashboard](./screenshots/dashboard.jpeg)
 
 # Mobile view
@@ -17,11 +21,6 @@ A responsive React + TypeScript dashboard designed for a school accounts operato
 
 # Reminder Modal
 ![Reminder Modal](./screenshots/reminder.jpeg)
-### Reminder Modal
-
-<p align="center">
-  <img src="./screenshots/reminder.png" width="40%" />
-</p>
 
 ## Problem
 
