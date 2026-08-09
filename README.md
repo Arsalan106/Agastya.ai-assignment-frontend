@@ -6,22 +6,17 @@ A responsive React + TypeScript dashboard designed for a school accounts operato
 
 ### Desktop Dashboard
 
-<p align="center">
-  <img src="./screenshots/dashboard.png" width="90%" />
-</p>
+# Dashboard Desktop view
+![Dashboard](./screenshots/dashboard.jpeg)
 
-### Mobile View
+# Mobile view
+![Dashboard](./screenshots/mobile.jpeg)
 
-<p align="center">
-  <img src="./screenshots/mobile.png" width="40%" />
-</p>
+# Payment History
+![Payment History](./screenshots/history.jpeg)
 
-### Payment History Drawer
-
-<p align="center">
-  <img src="./screenshots/history.png" width="40%" />
-</p>
-
+# Reminder Modal
+![Reminder Modal](./screenshots/reminder.jpeg)
 ### Reminder Modal
 
 <p align="center">
