@@ -1,75 +1,180 @@
-# React + TypeScript + Vite
+# Fee Follow-up Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A responsive React + TypeScript dashboard designed for a school accounts operator to review overdue fees, prioritize follow-ups, and queue WhatsApp reminders with minimal clicks.
 
-Currently, two official plugins are available:
+## Screenshots
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### Desktop Dashboard
 
-## React Compiler
+<p align="center">
+  <img src="./screenshots/dashboard.png" width="90%" />
+</p>
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Mobile View
 
-## Expanding the ESLint configuration
+<p align="center">
+  <img src="./screenshots/mobile.png" width="40%" />
+</p>
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Payment History Drawer
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+<p align="center">
+  <img src="./screenshots/history.png" width="40%" />
+</p>
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Reminder Modal
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+<p align="center">
+  <img src="./screenshots/reminder.png" width="40%" />
+</p>
 
+## Problem
+
+Lakshmi, the school accounts operator, needs a quick way to:
+
+* see which families require action,
+* identify urgent overdue accounts,
+* review payment history,
+* and send reminder messages in bulk.
+
+The dashboard is optimized for that daily workflow rather than for generic analytics.
+
+---
+
+## Tech Stack
+
+* **React 19**
+* **TypeScript**
+* **Vite**
+* **Tailwind CSS**
+
+---
+
+## Key Features
+
+* Search by **student** or **parent**
+* Status filters: **Urgent, Partial, Bounced, Instalment, Withdrawn**
+* Sticky bulk-action bar
+* Select-all workflow
+* Payment-history side drawer
+* Responsive mobile cards
+* Keyboard support (`Esc` closes overlays)
+
+---
+
+## Interaction Efficiency
+
+Queue reminders for all visible defaulters in **3 clicks**:
+
+1. Select all visible
+2. Queue WhatsApp reminders
+3. Confirm
+
+This directly addresses the assignment requirement of minimizing interaction cost.
+
+---
+
+## Awkward Records Handled
+
+| Record          | Label          |
+| --------------- | -------------- |
+| Credit balance  | **Credit**     |
+| Instalment plan | **Instalment** |
+| Bounced cheque  | **Bounced**    |
+
+Sibling accounts are marked with **“Chase family once”** to avoid duplicate outreach.
+
+---
+
+## Responsive Design
+
+### Desktop
+
+* Summary metrics
+* Filter chips
+* Full table with bulk actions
+
+### Mobile
+
+* Stacked student cards
+* Status badge
+* Amount due
+* Overdue days
+* One-tap payment history
+
+Dropped on mobile: detailed notes, fee-component breakdowns, and reminder metadata.
+
+---
+
+## Project Structure
+
+```text
+src/
+├─ components/
+│  ├─ Header.tsx
+│  ├─ SummaryCard.tsx
+│  ├─ StudentTable.tsx
+│  ├─ MobileCards.tsx
+│  ├─ BulkActionBar.tsx
+│  ├─ ReminderModal.tsx
+│  ├─ PaymentDrawer.tsx
+│  └─ states/
+│     ├─ LoadingState.tsx
+│     └─ ErrorState.tsx
+├─ data/
+│  └─ students.json
+├─ App.tsx
+├─ main.tsx
+└─ types.ts
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Getting Started
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Install dependencies
 
+```bash
+npm install
 ```
+
+### Run locally
+
+```bash
+npm run dev
+```
+
+Open the URL shown in the terminal (usually `http://localhost:5173`).
+
+### Build
+
+```bash
+npm run build
+```
+
+---
+
+
+---
+
+## Design Decisions
+
+A detailed explanation of visual hierarchy, awkward records, mobile trade-offs, interaction path, and rejected ideas is included in **`RATIONALE.md`**.
+
+---
+
+## What I Optimized
+
+* Fast scan time
+* Low click count
+* Clear status signaling
+* Reusable component structure
+* Maintainable state management
+
+---
+
+## Submission Notes
+
+* Dataset preserved from the assignment.
+* No external UI library used.
+* Components extracted for readability and maintainability.
