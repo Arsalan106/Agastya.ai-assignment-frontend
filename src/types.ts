@@ -1,13 +1,19 @@
 export type StudentStatus =
+    | 'paid'
     | 'urgent'
     | 'partial'
     | 'bounced'
-    | 'waiver';
+    | 'instalment'
+    | 'withdrawn'
+    | 'credit';
 
-export interface PaymentRecord {
+// ADD THIS
+export type PaymentType = 'UPI' | 'Cash' | 'Cheque';
+
+export interface PaymentHistory {
     id: number;
     date: string;
-    type: 'UPI' | 'Cash' | 'Cheque';
+    type: PaymentType;
     amount: number;
     note?: string;
 }
@@ -22,5 +28,5 @@ export interface Student {
     overdueDays: number;
     status: StudentStatus;
     whatsapp: boolean;
-    paymentHistory: PaymentRecord[];
+    paymentHistory: PaymentHistory[];
 }
