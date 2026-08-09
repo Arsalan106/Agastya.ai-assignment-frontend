@@ -1,14 +1,16 @@
+
+
 # Fee Follow-up Dashboard
 
 A responsive React + TypeScript dashboard designed for a school accounts operator to review overdue fees, prioritize follow-ups, and queue WhatsApp reminders with minimal clicks.
+# Video Recording
+<video controls src="20260809-2013-32.5978732.mp4" title="Title"></video>
 
 ## Screenshots
 
 ### Desktop Dashboard
 
 # Dashboard Desktop view
-# Video Recording
-<video controls src="20260809-2013-32.5978732.mp4" title="Title"></video>
 
 # Screenshot
 ![Dashboard](./screenshots/dashboard.jpeg)
