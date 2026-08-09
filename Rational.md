@@ -1,5 +1,6 @@
 # Fee Follow-up Dashboard — Rationale
 
+![Dashboard](<WhatsApp Image 2026-08-10 at 1.11.22 AM.jpeg>)
 ## 1. Visual hierarchy
 
 **Promoted:** Outstanding amount, accounts needing action, urgent cases, and search. These are the decisions Lakshmi needs within the first few seconds.
