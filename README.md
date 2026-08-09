@@ -4,15 +4,21 @@
 
 A responsive React + TypeScript dashboard designed for a school accounts operator to review overdue fees, prioritize follow-ups, and queue WhatsApp reminders with minimal clicks.
 # Video Recording
-<video controls src="20260809-2013-32.5978732.mp4" title="Title"></video>
+
+
+
+
+https://github.com/user-attachments/assets/c38abe19-9e63-43cb-a50d-a74f371f381b
+
+
+
+
+
+
 
 ## Screenshots
 
-### Desktop Dashboard
-
 # Dashboard Desktop view
-
-# Screenshot
 ![Dashboard](./screenshots/dashboard.jpeg)
 
 # Mobile view
