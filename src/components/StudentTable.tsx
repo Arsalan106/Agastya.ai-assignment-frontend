@@ -66,7 +66,36 @@ export default function StudentTable({
                             <td className="px-4 py-4 font-medium text-gray-900">
                                 {s.student}
                             </td>
-
+                            <span
+                                className={`mt-1 inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium capitalize ${s.status === 'urgent'
+                                        ? 'bg-red-100 text-red-700'
+                                        : s.status === 'partial'
+                                            ? 'bg-yellow-100 text-yellow-800'
+                                            : s.status === 'bounced'
+                                                ? 'bg-orange-100 text-orange-700'
+                                                : s.status === 'instalment'
+                                                    ? 'bg-blue-100 text-blue-700'
+                                                    : s.status === 'withdrawn'
+                                                        ? 'bg-gray-200 text-gray-700'
+                                                        : s.status === 'credit'
+                                                            ? 'bg-green-100 text-green-700'
+                                                            : 'bg-gray-100 text-gray-700'
+                                    }`}
+                            >
+                                {s.status === 'urgent'
+                                    ? 'Overdue'
+                                    : s.status === 'partial'
+                                        ? 'Partial'
+                                        : s.status === 'bounced'
+                                            ? 'Bounced'
+                                            : s.status === 'instalment'
+                                                ? 'Instalment'
+                                                : s.status === 'withdrawn'
+                                                    ? 'Withdrawn'
+                                                    : s.status === 'credit'
+                                                        ? 'Credit'
+                                                        : s.status}
+                            </span>
                             <td className="px-4 py-4 text-gray-700">
                                 {s.className}
                             </td>

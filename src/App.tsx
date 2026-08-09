@@ -220,6 +220,7 @@ export default function App() {
               onToggleSelectAll={toggleSelectAll}
               onOpenHistory={openHistory}
             />
+
             {/* Mobile cards */}
             <MobileCards
               students={filtered}
@@ -230,12 +231,14 @@ export default function App() {
           </>
         )}
       </div>
+
       {/* Sticky bulk action bar */}
       <BulkAction
         count={selectedIds.length}
         onClear={() => setSelectedIds([])}
         onSend={() => setShowReminderModal(true)}
       />
+
       {/* Reminder modal */}
       <ReminderModal
         open={showReminderModal}
