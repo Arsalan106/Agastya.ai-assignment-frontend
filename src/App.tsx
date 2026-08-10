@@ -90,7 +90,9 @@ export default function App() {
   return (
     <div className='min-h-screen bg-gray-50'>
       {/* Header */}
-      <Header value={query} onChange={setQuery} />
+      <div className='mx-auto max-w-7xl px-4 pt-4'>
+        <Header value={query} onChange={setQuery} />
+      </div>
 
       <div className='mx-auto max-w-7xl px-4 py-6 space-y-6'>
         {/* Summary cards */}
@@ -98,7 +100,7 @@ export default function App() {
           actions={filtered.length}
           outstandingAmount={totalOutstanding}
           UrgentCases={urgentCount}
-          reminders={48}
+          reminders={4}
         />
 
         {/* Filters */}
