@@ -1,189 +1,108 @@
-import { useEffect, useMemo, useState } from 'react';
-import data from './data/students.json';
+import { useMemo, useState } from 'react';
 import type { Student } from './types';
-import ReminderModal from './components/ReminderModal';
-import PaymentHistoryDrawer from './components/PaymentDrawer';
-import BulkAction from './components/BulkActionBar';
+
+import Header from './components/Header';
 import SummaryCard from './components/SummaryCard';
 import StudentTable from './components/StudentTable';
-import Header from './components/Header'
-import MobileCards from './components/MobileCards'
-import ErrorState from './components/states/ErrorState'
-import LoadingState from './components/states/LoadingState'
-function mapStatus(raw: string): Student['status'] {
-  switch (raw) {
-    case 'OVERDUE':
-      return 'urgent';
-    case 'PARTIALLY_PAID':
-      return 'partial';
-    case 'PAYMENT_FAILED':
-      return 'bounced';
-    case 'INSTALMENT_PLAN':
-      return 'instalment';
-    case 'WITHDRAWN':
-      return 'withdrawn';
-    case 'CREDIT_BALANCE':
-      return 'credit';
-    case 'PAID':
-    default:
-      return 'paid';
-  }
-}
+import MobileCards from './components/MobileCards';
+import BulkAction from './components/BulkActionBar';
+import ReminderModal from './components/ReminderModal';
+import PaymentHistoryDrawer from './components/PaymentDrawer';
+import ErrorState from './components/states/ErrorState';
+import LoadingState from './components/states/LoadingState';
 
-const students: Student[] = data.students.map((s) => ({
-  id: Number(s.id.replace('STU-', '')),
-  student: s.name,
-  className: `${s.class}-${s.section}`,
-  parent: s.guardian.name,
-  phone: s.guardian.phone,
-  pending: s.balance,
-  overdueDays: s.daysOverdue,
-  status: mapStatus(s.status),
-  whatsapp: true,
-  paymentHistory: (s.payments ?? []).map(
-    (
-      p: {
-        id: string;
-        date: string;
-        amount: number;
-        mode: string;
-        note?: string;
-      },
-      i: number
-    ) => ({
-      id: i + 1,
-      date: p.date,
-      type: (p.mode === 'UPI'
-        ? 'UPI'
-        : p.mode === 'CASH'
-          ? 'Cash'
-          : 'Cheque') as 'UPI' | 'Cash' | 'Cheque',
-      amount: p.amount,
-      note: p.note,
-    })
-  ),
-}));
+import { students } from './lib/students';
+import { filterStudents, type Filter } from './lib/filterStudents';
+import { useSelection } from './hooks/useSelection';
+import { useEscape } from './hooks/useEscape';
 
-const filters = [
+const filters: Filter[] = [
   'all',
   'urgent',
   'partial',
   'bounced',
   'instalment',
   'withdrawn',
-] as const;
+];
 
 export default function App() {
   const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState<(typeof filters)[number]>('all');
-  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [filter, setFilter] = useState<Filter>('all');
   const [showReminderModal, setShowReminderModal] = useState(false);
   const [activeStudent, setActiveStudent] = useState<Student | null>(null);
 
+  // selection state
+  const { selectedIds, toggle, clear, toggleAll } = useSelection();
+
   // demo states required by assignment
-  const [loading] = useState(false);
-  const [error] = useState('');
-  const openHistory = (student: Student) => {
-    setActiveStudent(student);
-  };
-  const filtered = useMemo(() => {
-    const q = query.toLowerCase();
+  const loading = false;
+  const error = '';
 
-    return students
-      .filter((s) => {
-        const matchesQuery =
-          s.student.toLowerCase().includes(q) ||
-          s.parent.toLowerCase().includes(q);
+  // filtered + sorted students
+  const filtered = useMemo(
+    () => filterStudents(students, query, filter),
+    [query, filter]
+  );
 
-        const matchesFilter =
-          filter === 'all' ? s.status !== 'paid' : s.status === filter;
+  // summary calculations
+  const totalOutstanding = useMemo(
+    () =>
+      filtered
+        .filter((s) => s.pending > 0)
+        .reduce((sum, s) => sum + s.pending, 0),
+    [filtered]
+  );
 
-        return matchesQuery && matchesFilter;
-      })
-      .sort((a, b) => {
-        if (a.status === 'urgent' && b.status !== 'urgent') return -1;
-        if (a.status !== 'urgent' && b.status === 'urgent') return 1;
-        return b.overdueDays - a.overdueDays;
-      });
-  }, [query, filter]);
-
-  useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setShowReminderModal(false);
-        setActiveStudent(null);
-      }
-    };
-
-    window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
-  }, []);
-
-  const totalOutstanding = useMemo(() => filtered.filter((s) => s.pending > 0).reduce((a, b) => a + b.pending, 0), [filtered]);
+  const urgentCount = useMemo(
+    () => filtered.filter((s) => s.status === 'urgent').length,
+    [filtered]
+  );
 
   const allVisibleSelected =
     filtered.length > 0 &&
     filtered.every((s) => selectedIds.includes(s.id));
 
-  const toggleStudent = (id: number) => {
-    setSelectedIds((prev) =>
-      prev.includes(id)
-        ? prev.filter((x) => x !== id)
-        : [...prev, id]
+  // close modal/drawer on Escape
+  useEscape(() => {
+    setShowReminderModal(false);
+    setActiveStudent(null);
+  });
+
+  const handleSelectAll = () => {
+    toggleAll(
+      filtered.map((s) => s.id),
+      allVisibleSelected
     );
   };
 
-  const toggleSelectAll = () => {
-    const filteredIds = filtered.map((s) => s.id);
-
-    if (allVisibleSelected) {
-      setSelectedIds((prev) =>
-        prev.filter((id) => !filteredIds.includes(id))
-      );
-    } else {
-      setSelectedIds((prev) =>
-        Array.from(new Set([...prev, ...filteredIds]))
-      );
-    }
-  };
-
-  const sendReminders = () => {
+  const handleSendReminders = () => {
     alert(
       `WhatsApp reminders queued for ${selectedIds.length} families`
     );
-    setSelectedIds([]);
+
+    clear();
     setShowReminderModal(false);
   };
 
-  if (loading) {
-    return (
-      <LoadingState />
-    );
-  }
-
-  if (error) {
-    return (
-      <ErrorState />
-    );
-  }
+  if (loading) return <LoadingState />;
+  if (error) return <ErrorState />;
 
   return (
-    <div className='min-h-screen bg-gray-50 text-gray-900'>
-      <div className='mx-auto max-w-7xl p-4 md:p-6'>
-        {/* Header */}
-        <Header
-          value={query}
-          onChange={setQuery}
-        />
+    <div className='min-h-screen bg-gray-50'>
+      {/* Header */}
+      <Header value={query} onChange={setQuery} />
+
+      <div className='mx-auto max-w-7xl px-4 py-6 space-y-6'>
         {/* Summary cards */}
         <SummaryCard
           actions={filtered.length}
           outstandingAmount={totalOutstanding}
-          UrgentCases={filtered.filter((s) => s.status === 'urgent').length}
+          UrgentCases={urgentCount}
           reminders={48}
         />
+
         {/* Filters */}
-        <div className='flex flex-wrap gap-2 mb-4'>
+        <div className='flex flex-wrap gap-2'>
           {filters.map((f) => (
             <button
               key={f}
@@ -205,7 +124,7 @@ export default function App() {
             <p className='font-medium text-gray-900'>
               No students match your filters
             </p>
-            <p className='text-sm text-gray-500 mt-1'>
+            <p className='mt-1 text-sm text-gray-500'>
               Try clearing the search or choosing a different status.
             </p>
           </div>
@@ -216,17 +135,17 @@ export default function App() {
               students={filtered}
               selectedIds={selectedIds}
               allVisibleSelected={allVisibleSelected}
-              onToggleStudent={toggleStudent}
-              onToggleSelectAll={toggleSelectAll}
-              onOpenHistory={openHistory}
+              onToggleStudent={toggle}
+              onToggleSelectAll={handleSelectAll}
+              onOpenHistory={setActiveStudent}
             />
 
             {/* Mobile cards */}
             <MobileCards
               students={filtered}
               selectedIds={selectedIds}
-              onToggleStudent={toggleStudent}
-              onOpenHistory={openHistory}
+              onToggleStudent={toggle}
+              onOpenHistory={setActiveStudent}
             />
           </>
         )}
@@ -235,7 +154,7 @@ export default function App() {
       {/* Sticky bulk action bar */}
       <BulkAction
         count={selectedIds.length}
-        onClear={() => setSelectedIds([])}
+        onClear={clear}
         onSend={() => setShowReminderModal(true)}
       />
 
@@ -244,7 +163,7 @@ export default function App() {
         open={showReminderModal}
         count={selectedIds.length}
         onClose={() => setShowReminderModal(false)}
-        onConfirm={sendReminders}
+        onConfirm={handleSendReminders}
       />
 
       {/* Payment history drawer */}
